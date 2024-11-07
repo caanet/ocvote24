@@ -92,10 +92,17 @@
                         'ml-2 inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset border',
                         getLeftToCount(race) === 0
                           ? 'bg-yellow-50 text-yellow-800 ring-yellow-600/20 border-yellow-200'
-                          : 'bg-green-50 text-green-700 ring-green-600/20 border-green-200'
+                          : race.candidates[1] && (race.candidates[1].votes + getLeftToCount(race)) < candidate.votes
+                            ? 'bg-blue-50 text-blue-700 ring-blue-600/20 border-blue-200'
+                            : 'bg-green-50 text-green-700 ring-green-600/20 border-green-200'
                       ]"
                     >
-                      {{ getLeftToCount(race) === 0 ? 'WON' : 'LEADING' }}
+                      {{ getLeftToCount(race) === 0 
+                          ? 'WON' 
+                          : race.candidates[1] && (race.candidates[1].votes + getLeftToCount(race)) < candidate.votes
+                            ? 'LIKELY WINNER'
+                            : 'LEADING' 
+                      }}
                     </span>
                   </td>
                   <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900">
