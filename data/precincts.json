@@ -1,0 +1,90 @@
+[
+  {
+    "district": "Costa Mesa Council District 1",
+    "precinctid": "*552-1"
+  },
+  {
+    "district": "Costa Mesa Council District 2",
+    "precinctid": "*552-2"
+  },
+  {
+    "district": "Costa Mesa Council District 3",
+    "precinctid": "*552-3"
+  },
+  {
+    "district": "Costa Mesa Council District 4",
+    "precinctid": "*552-4"
+  },
+  {
+    "district": "Costa Mesa Council District 5",
+    "precinctid": "*552-5"
+  },
+  {
+    "district": "Costa Mesa Council District 6",
+    "precinctid": "*552-6"
+  },
+  {
+    "district": "Irvine Council District 1",
+    "precinctid": "*559-1"
+  },
+  {
+    "district": "Irvine Council District 2",
+    "precinctid": "*559-2"
+  },
+  {
+    "district": "Irvine Council District 3",
+    "precinctid": "*559-3"
+  },
+  {
+    "district": "Irvine Council District 4",
+    "precinctid": "*559-4"
+  },
+  {
+    "district": "Irvine Council District 5",
+    "precinctid": "*559-5"
+  },
+  {
+    "district": "Irvine Council District 6",
+    "precinctid": "*559-6"
+  },
+  {
+    "district": "Santa Ana Ward Division 1",
+    "precinctid": "*568-1"
+  },
+  {
+    "district": "Santa Ana Ward Division 2",
+    "precinctid": "*568-2"
+  },
+  {
+    "district": "Santa Ana Ward Division 3",
+    "precinctid": "*568-3"
+  },
+  {
+    "district": "Santa Ana Ward Division 4",
+    "precinctid": "*568-4"
+  },
+  {
+    "district": "Santa Ana Ward Division 5",
+    "precinctid": "*568-5"
+  },
+  {
+    "district": "Santa Ana Ward Division 6",
+    "precinctid": "*568-6"
+  },
+  {
+    "district": "Tustin Council District 1",
+    "precinctid": "*571-1"
+  },
+  {
+    "district": "Tustin Council District 2",
+    "precinctid": "*571-2"
+  },
+  {
+    "district": "Tustin Council District 3",
+    "precinctid": "*571-3"
+  },
+  {
+    "district": "Tustin Council District 4",
+    "precinctid": "*571-4"
+  }
+]
