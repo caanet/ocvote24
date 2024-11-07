@@ -84,7 +84,18 @@
     </header>
 
     <!-- Main Content -->
-    <main class="pt-16 lg:pt-20">
+    <main class="pt-16">
+      <div class="bg-blue-50 border-b border-blue-100">
+        <div class="max-w-7xl mx-auto py-2 px-4 sm:px-6 lg:px-8">
+          <p class="text-sm text-center text-blue-700">
+            Next update in 
+            <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+              {{ timeLeft }}
+            </span>
+            (5:00 PM PST)
+          </p>
+        </div>
+      </div>
       <div class="max-w-full overflow-x-hidden">
         <slot />
       </div>
@@ -133,6 +144,41 @@ onMounted(() => {
 // Cleanup event listener
 onUnmounted(() => {
   window.removeEventListener('resize')
+})
+
+const getNextUpdate = () => {
+  const now = new Date()
+  const pst = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }))
+  let next = new Date(pst)
+  
+  next.setHours(17, 0, 0, 0) // Set to 5:00 PM
+  
+  // If it's past 5 PM, set to next day
+  if (pst.getHours() >= 17) {
+    next.setDate(next.getDate() + 1)
+  }
+  
+  return next
+}
+
+const timeLeft = ref('')
+
+const updateCountdown = () => {
+  const now = new Date()
+  const next = getNextUpdate()
+  const diff = next - now
+  
+  const hours = Math.floor(diff / (1000 * 60 * 60))
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+  
+  timeLeft.value = `${hours}h ${minutes}m ${seconds}s`
+}
+
+// Update countdown every second
+onMounted(() => {
+  updateCountdown()
+  setInterval(updateCountdown, 1000)
 })
 </script>
 
