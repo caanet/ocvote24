@@ -97,18 +97,28 @@ fetchRaces()
         
         <!-- Vote Totals Summary -->
         <div class="mb-4 p-3 sm:p-4 bg-gray-50 rounded-lg">
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4" 
+               :class="{'sm:grid-cols-4': race.candidates.length === 2}">
             <div class="text-sm">
-              <span class="text-gray-600">Total Votes: </span>
-              <span class="font-semibold text-gray-900">{{ formatNumber(getTotalVotes(race.candidates)) }}</span>
-            </div>
-            <div class="text-sm sm:text-center">
-              <span class="text-gray-600">Ballots Cast: </span>
+              <span class="text-gray-600">Total Ballots: </span>
               <span class="font-semibold text-gray-900">{{ formatNumber(race.totalBallots) }}</span>
             </div>
-            <div class="text-sm sm:text-right">
+            <div class="text-sm sm:text-center">
+              <span class="text-gray-600">Total Counted: </span>
+              <span class="font-semibold text-gray-900">
+                {{ formatNumber(getTotalVotes(race.candidates)) }}
+                <span class="ml-1 text-xs text-gray-500">
+                  ({{ formatPercentage((getTotalVotes(race.candidates) / race.totalBallots) * 100) }})
+                </span>
+              </span>
+            </div>
+            <div class="text-sm sm:text-center">
               <span class="text-gray-600">Left to Count: </span>
               <span class="font-semibold text-gray-900">{{ formatNumber(getLeftToCount(race)) }}</span>
+            </div>
+            <div v-if="race.candidates.length === 2" class="text-sm sm:text-right">
+              <span class="text-gray-600">Needed to Win: </span>
+              <span class="font-semibold text-gray-900">{{ formatNumber(Math.floor(race.totalBallots / 2) + 1) }}</span>
             </div>
           </div>
         </div>
@@ -171,7 +181,7 @@ fetchRaces()
                       <div class="absolute inset-y-0 left-0 w-full bg-gray-100"></div>
                       <div 
                         class="absolute inset-y-0 left-0 transition-all duration-500 ease-out"
-                        :class="index === 0 ? 'bg-green-100' : 'bg-gray-400'"
+                        :class="index === 0 ? 'bg-green-500' : 'bg-gray-400'"
                         :style="{
                           width: `${candidate.percentage}%`
                         }"

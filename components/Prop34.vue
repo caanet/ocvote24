@@ -83,16 +83,9 @@ export default {
     totalVotes() {
       if (!this.measure) return '0'
       
-      // Log raw values
-      console.log('Raw values:', {
-        yesVotes: this.measure.yesVotes,
-        noVotes: this.measure.noVotes
-      })
 
       // Simple addition
       const total = this.measure.yesVotes + this.measure.noVotes
-      
-      console.log('Total:', total)
       
       return this.formatNumber(total)
     },
@@ -124,13 +117,6 @@ export default {
           yesPercent: parseFloat(measure.yesPercent),
           noPercent: parseFloat(measure.noPercent)
         }
-        
-        // Log the processed numbers
-        console.log('Processed numbers:', {
-          yesVotes,
-          noVotes,
-          sum: yesVotes + noVotes
-        })
       }
     } catch (error) {
       console.error('Error fetching data:', error)
