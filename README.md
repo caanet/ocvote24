@@ -1,6 +1,8 @@
 # About
 
-This is Victor Cao's dashboard for the Orange County elections. It is built with Nuxt.js and Tailwind CSS. It just helps to get some quick analysis of the election results and provides some insights about the direction of the ballots.
+This is my personal dashboard for the Orange County elections. It is built with Nuxt.js and Tailwind CSS. It just helps to get some quick analysis of the election results and provides some insights about the direction of the ballots. I just want the races I'm tracking to be automatically updated. The ROV/SoS websites are fine, but this just makes it easier to track the races I care about.
+
+I've sourced this information directly from the OC Registrar of Voters (XML) and the California Secretary of State (API). 
 
 # Nuxt Minimal Starter
 
