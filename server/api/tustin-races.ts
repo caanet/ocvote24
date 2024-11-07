@@ -10,6 +10,12 @@ export default defineEventHandler(async () => {
     
     // Extract Tustin races
     const tustinRaces = {}
+    let generatedDate = ''
+
+    // Get the GeneratedDate from the correct path
+    if (jsonData.NewDataSet?.GeneratedDate) {
+      generatedDate = jsonData.NewDataSet.GeneratedDate
+    }
 
     jsonData.NewDataSet.Table.forEach(entry => {
       if (entry.RaceName?.startsWith('CITY OF TUSTIN')) {
@@ -21,7 +27,6 @@ export default defineEventHandler(async () => {
           }
         }
 
-        // Add the candidate
         tustinRaces[entry.RaceName].candidates.push({
           name: entry.ContestantName?.replace('*', '').trim(),
           votes: parseInt(entry.TotalVotes) || 0
@@ -42,27 +47,32 @@ export default defineEventHandler(async () => {
       }
     })
 
-    return races
+    return {
+      races,
+      generatedDate
+    }
 
   } catch (error) {
-    console.error('Error:', error)
-    return [
-      {
-        title: "City of Tustin Mayor",
-        totalBallots: 25000,
-        candidates: [
-          {
-            name: "Example Candidate 1",
-            votes: 15000,
-            percentage: 60.0
-          },
-          {
-            name: "Example Candidate 2",
-            votes: 10000,
-            percentage: 40.0
-          }
-        ]
-      }
-    ]
+    return {
+      races: [
+        {
+          title: "CITY OF TUSTIN Mayor",
+          totalBallots: 25000,
+          candidates: [
+            {
+              name: "Example Candidate 1",
+              votes: 15000,
+              percentage: 60.0
+            },
+            {
+              name: "Example Candidate 2",
+              votes: 10000,
+              percentage: 40.0
+            }
+          ]
+        }
+      ],
+      generatedDate: new Date().toLocaleString()
+    }
   }
 }) 

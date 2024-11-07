@@ -8,6 +8,12 @@ export default defineEventHandler(async () => {
     const parser = new XMLParser()
     const jsonData = parser.parse(xmlData)
     
+    let generatedDate = ''
+
+    if (jsonData.NewDataSet?.GeneratedDate) {
+      generatedDate = jsonData.NewDataSet.GeneratedDate
+    }
+
     // Extract Orange races
     const orangeRaces = {}
 
@@ -42,7 +48,10 @@ export default defineEventHandler(async () => {
       }
     })
 
-    return races
+    return {
+      races,
+      generatedDate
+    }
 
   } catch (error) {
     console.error('Error:', error)

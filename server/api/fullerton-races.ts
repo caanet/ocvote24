@@ -7,7 +7,13 @@ export default defineEventHandler(async () => {
     
     const parser = new XMLParser()
     const jsonData = parser.parse(xmlData)
-    
+    let generatedDate = ''
+
+    // Get the GeneratedDate from the correct path
+    if (jsonData.NewDataSet?.GeneratedDate) {
+      generatedDate = jsonData.NewDataSet.GeneratedDate
+    }
+
     // Extract Fullerton races
     const fullertonRaces = {}
 
@@ -43,7 +49,10 @@ export default defineEventHandler(async () => {
       }
     })
 
-    return races
+    return {
+      races,
+      generatedDate
+    }
 
   } catch (error) {
     return [

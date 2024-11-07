@@ -45,16 +45,14 @@ const fetchRaces = async () => {
     
     const { data } = await useFetch('/api/orange-races')
 
-
     if (!data.value) {
       throw new Error('No data received')
     }
 
-    races.value = data.value
-    lastUpdated.value = new Date().toLocaleString()
+    races.value = data.value.races
+    lastUpdated.value = data.value.generatedDate
     
   } catch (err) {
-
     error.value = 'Unable to load race data. Please try again later.'
   } finally {
     loading.value = false
