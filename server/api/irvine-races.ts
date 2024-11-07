@@ -12,9 +12,9 @@ export default defineEventHandler(async () => {
     const irvineRaces = {}
     let generatedDate = ''
 
-    // Get the GeneratedDate if available
-    if (jsonData.NewDataSet.Table[0]?.GeneratedDate) {
-      generatedDate = jsonData.NewDataSet.Table[0].GeneratedDate
+    // Get the GeneratedDate from the correct path
+    if (jsonData.NewDataSet?.GeneratedDate) {
+      generatedDate = jsonData.NewDataSet.GeneratedDate
     }
 
     jsonData.NewDataSet.Table.forEach(entry => {
