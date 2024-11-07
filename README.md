@@ -1,3 +1,7 @@
+# About
+
+This is Victor Cao's dashboard for the Orange County elections. It is built with Nuxt.js and Tailwind CSS. It just helps to get some quick analysis of the election results and provides some insights about the direction of the ballots.
+
 # Nuxt Minimal Starter
 
 Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.

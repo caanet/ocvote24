@@ -94,7 +94,7 @@
     <footer class="bg-white border-t mt-8">
       <div class="container mx-auto px-4 py-6">
         <p class="text-center text-gray-600 text-sm">
-          © {{ new Date().getFullYear() }} Orange County Elections
+          © {{ new Date().getFullYear() }} Victor Cao - Orange County Elections Dashboard
         </p>
       </div>
     </footer>

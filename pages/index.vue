@@ -83,6 +83,32 @@ onMounted(() => {
     window.removeEventListener('resize', checkWidth)
   })
 })
+
+useHead({
+  title: 'Orange County Election Results 2024',
+  meta: [
+    {
+      name: 'description',
+      content: 'Live election results for Orange County cities including Costa Mesa, Fullerton, Irvine, Orange, Santa Ana, and Tustin. View real-time vote counts and percentages for local races.'
+    },
+    {
+      property: 'og:title',
+      content: 'Orange County Election Results 2024'
+    },
+    {
+      property: 'og:description',
+      content: 'Live election results for Orange County cities including Costa Mesa, Fullerton, Irvine, Orange, Santa Ana, and Tustin. View real-time vote counts and percentages for local races.'
+    },
+    {
+      name: 'twitter:title',
+      content: 'Orange County Election Results 2024'
+    },
+    {
+      name: 'twitter:description',
+      content: 'Live election results for Orange County cities including Costa Mesa, Fullerton, Irvine, Orange, Santa Ana, and Tustin. View real-time vote counts and percentages for local races.'
+    }
+  ]
+})
 </script>
 
 <style>
