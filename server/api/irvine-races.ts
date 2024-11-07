@@ -8,26 +8,27 @@ export default defineEventHandler(async () => {
     const parser = new XMLParser()
     const jsonData = parser.parse(xmlData)
     
-    // Extract Santa Ana races
-    const santaAnaRaces = {}
+    // Extract Irvine races
+    const irvineRaces = {}
     let generatedDate = ''
 
     // Get the GeneratedDate if available
-    if (jsonData.NewDataSet.GeneratedDate) {
-      generatedDate = jsonData.NewDataSet.GeneratedDate
+    if (jsonData.NewDataSet.Table[0]?.GeneratedDate) {
+      generatedDate = jsonData.NewDataSet.Table[0].GeneratedDate
     }
 
     jsonData.NewDataSet.Table.forEach(entry => {
-      if (entry.RaceName?.startsWith('CITY OF SANTA ANA')) {
-        if (!santaAnaRaces[entry.RaceName]) {
-          santaAnaRaces[entry.RaceName] = {
+      if (entry.RaceName?.startsWith('CITY OF IRVINE')) {
+        if (!irvineRaces[entry.RaceName]) {
+          irvineRaces[entry.RaceName] = {
             title: entry.RaceName,
             totalBallots: parseInt(entry.TimesCounted) || 0,
             candidates: []
           }
         }
 
-        santaAnaRaces[entry.RaceName].candidates.push({
+        // Add the candidate
+        irvineRaces[entry.RaceName].candidates.push({
           name: entry.ContestantName?.replace('*', '').trim(),
           votes: parseInt(entry.TotalVotes) || 0
         })
@@ -35,7 +36,7 @@ export default defineEventHandler(async () => {
     })
 
     // Convert to array and calculate percentages
-    const races = Object.values(santaAnaRaces).map(race => {
+    const races = Object.values(irvineRaces).map(race => {
       const totalVotes = race.candidates.reduce((sum, candidate) => sum + candidate.votes, 0)
       
       return {
@@ -56,7 +57,7 @@ export default defineEventHandler(async () => {
     return {
       races: [
         {
-          title: "CITY OF SANTA ANA Mayor",
+          title: "CITY OF IRVINE Mayor",
           totalBallots: 25000,
           candidates: [
             {

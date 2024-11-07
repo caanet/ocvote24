@@ -1,3 +1,68 @@
+<script setup>
+const races = ref([])
+const loading = ref(true)
+const error = ref(null)
+const lastUpdated = ref('')
+
+// Format helpers
+const formatNumber = (num) => {
+  return new Intl.NumberFormat().format(num)
+}
+
+const formatPercentage = (num) => {
+  return num ? num.toFixed(1) + '%' : '0%'
+}
+
+// Calculate total votes for a race
+const getTotalVotes = (candidates) => {
+  return candidates.reduce((sum, candidate) => sum + candidate.votes, 0)
+}
+
+// Calculate remaining ballots to count
+const getLeftToCount = (race) => {
+  const totalVotes = getTotalVotes(race.candidates)
+  return race.totalBallots - totalVotes
+}
+
+// Calculate differences between candidates
+const getVoteDifference = (candidates, index) => {
+  if (index === 0) return null
+  const difference = candidates[0].votes - candidates[index].votes
+  return difference
+}
+
+const getPercentageDifference = (candidates, index) => {
+  if (index === 0) return null
+  const difference = candidates[0].percentage - candidates[index].percentage
+  return difference
+}
+
+// Fetch race data
+const fetchRaces = async () => {
+  try {
+    loading.value = true
+    error.value = null
+    
+    const { data } = await useFetch('/api/irvine-races')
+
+    if (!data.value) {
+      throw new Error('No data received')
+    }
+
+    races.value = data.value.races
+    lastUpdated.value = data.value.generatedDate
+    
+  } catch (err) {
+    error.value = 'Unable to load race data. Please try again later.'
+  } finally {
+    loading.value = false
+  }
+}
+
+// Fetch data immediately
+fetchRaces()
+</script>
+
 <template>
   <div class="space-y-8">
     <!-- Loading State -->
@@ -8,11 +73,6 @@
     <!-- Error State -->
     <div v-else-if="error" class="bg-red-50 border-l-4 border-red-500 p-4">
       <div class="flex">
-        <div class="flex-shrink-0">
-          <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-          </svg>
-        </div>
         <div class="ml-3">
           <p class="text-sm text-red-700">{{ error }}</p>
           <button 
@@ -90,10 +150,7 @@
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-right relative">
                 <div class="relative flex items-center justify-end h-full">
-                  <!-- Background bar -->
                   <div class="absolute inset-y-0 left-0 w-full bg-gray-100"></div>
-                  
-                  <!-- Colored fill -->
                   <div 
                     class="absolute inset-y-0 left-0 transition-all duration-500 ease-out"
                     :class="index === 0 ? 'bg-blue-500' : 'bg-gray-400'"
@@ -102,8 +159,6 @@
                       opacity: '0.15'
                     }"
                   ></div>
-                  
-                  <!-- Percentage text -->
                   <span class="relative z-10 font-medium">
                     {{ formatPercentage(candidate.percentage) }}
                   </span>
@@ -125,69 +180,4 @@
       No results available at this time.
     </div>
   </div>
-</template>
-
-<script setup>
-const races = ref([])
-const loading = ref(true)
-const error = ref(null)
-const lastUpdated = ref('')
-
-// Format helpers
-const formatNumber = (num) => {
-  return new Intl.NumberFormat().format(num)
-}
-
-const formatPercentage = (num) => {
-  return num ? num.toFixed(1) + '%' : '0%'
-}
-
-// Calculate total votes for a race
-const getTotalVotes = (candidates) => {
-  return candidates.reduce((sum, candidate) => sum + candidate.votes, 0)
-}
-
-// Calculate remaining ballots to count
-const getLeftToCount = (race) => {
-  const totalVotes = getTotalVotes(race.candidates)
-  return race.totalBallots - totalVotes
-}
-
-// Calculate differences between candidates
-const getVoteDifference = (candidates, index) => {
-  if (index === 0) return null
-  const difference = candidates[0].votes - candidates[index].votes
-  return difference
-}
-
-const getPercentageDifference = (candidates, index) => {
-  if (index === 0) return null
-  const difference = candidates[0].percentage - candidates[index].percentage
-  return difference
-}
-
-// Fetch race data
-const fetchRaces = async () => {
-  try {
-    loading.value = true
-    error.value = null
-    
-    const { data } = await useFetch('/api/santa-ana-races')
-
-    if (!data.value) {
-      throw new Error('No data received')
-    }
-
-    races.value = data.value.races
-    lastUpdated.value = data.value.generatedDate
-    
-  } catch (err) {
-    error.value = 'Unable to load race data. Please try again later.'
-  } finally {
-    loading.value = false
-  }
-}
-
-// Fetch data immediately
-fetchRaces()
-</script> 
+</template> 

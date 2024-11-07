@@ -90,6 +90,20 @@
           </div>
           <TustinRaces />
         </div>
+
+        <!-- Irvine Section -->
+        <div id="irvine" class="mb-12 scroll-mt-8">
+          <div class="mb-6 flex justify-between items-center">
+            <h2 class="text-2xl font-bold text-gray-800">Irvine Results</h2>
+            <NuxtLink 
+              to="/irvine" 
+              class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+            >
+              View Full Irvine Results
+            </NuxtLink>
+          </div>
+          <IrvineRaces />
+        </div>
       </div>
     </div>
   </div>
@@ -102,11 +116,13 @@ import OrangeRaces from '~/components/OrangeRaces.vue'
 import TustinRaces from '~/components/TustinRaces.vue'
 import CostaMesaRaces from '~/components/CostaMesaRaces.vue'
 import FullertonRaces from '~/components/FullertonRaces.vue'
+import IrvineRaces from '~/components/IrvineRaces.vue'
 
 // Navigation data (alphabetically ordered)
 const cities = [
   { id: 'costa-mesa', name: 'Costa Mesa' },
   { id: 'fullerton', name: 'Fullerton' },
+  { id: 'irvine', name: 'Irvine' },
   { id: 'orange', name: 'Orange' },
   { id: 'santa-ana', name: 'Santa Ana' },
   { id: 'tustin', name: 'Tustin' }
