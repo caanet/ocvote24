@@ -141,7 +141,17 @@ fetchRaces()
                 >
                   <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {{ candidate.name }}
-                    <span v-if="index === 0" class="ml-1 text-blue-600">(Leading)</span>
+                    <span 
+                      v-if="index === 0" 
+                      :class="[
+                        'ml-2 inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset border',
+                        getLeftToCount(race) === 0
+                          ? 'bg-yellow-50 text-yellow-800 ring-yellow-600/20 border-yellow-200'
+                          : 'bg-green-50 text-green-700 ring-green-600/20 border-green-200'
+                      ]"
+                    >
+                      {{ getLeftToCount(race) === 0 ? 'WON' : 'LEADING' }}
+                    </span>
                   </td>
                   <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900">
                     {{ formatNumber(candidate.votes) }}
@@ -161,10 +171,9 @@ fetchRaces()
                       <div class="absolute inset-y-0 left-0 w-full bg-gray-100"></div>
                       <div 
                         class="absolute inset-y-0 left-0 transition-all duration-500 ease-out"
-                        :class="index === 0 ? 'bg-blue-500' : 'bg-gray-400'"
+                        :class="index === 0 ? 'bg-green-100' : 'bg-gray-400'"
                         :style="{
-                          width: `${candidate.percentage}%`,
-                          opacity: '0.15'
+                          width: `${candidate.percentage}%`
                         }"
                       ></div>
                       <span class="relative z-10 font-medium">

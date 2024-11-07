@@ -12,6 +12,8 @@
     "cf-typegen": "wrangler types"
   },
   "dependencies": {
+    "@headlessui/vue": "^1.7.23",
+    "@heroicons/vue": "^2.1.5",
     "fast-xml-parser": "^4.5.0",
     "install": "^0.13.0",
     "node-html-parser": "^6.1.13",

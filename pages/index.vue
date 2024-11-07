@@ -1,13 +1,15 @@
 <template>
   <div class="container mx-auto px-4">
     <div class="py-8">
-      <!-- City Sections -->
+      <!-- All Sections -->
       <div class="space-y-12">
-        <div v-for="city in cities" :key="city.id" :id="city.id" class="scroll-mt-20">
-          <h2 class="text-xl lg:text-2xl font-bold text-gray-800 mb-6">{{ city.name }} Results</h2>
+        <div v-for="section in sections" :key="section.id" :id="section.id" class="scroll-mt-20">
+          <h2 class="text-xl lg:text-2xl font-bold text-gray-800 mb-6">
+            {{ section.name }}{{ section.id === 'prop-34' ? '' : ' Results' }}
+          </h2>
           <component 
-            :is="city.component" 
-            v-if="city.component"
+            :is="section.component" 
+            v-if="section.component"
           />
         </div>
       </div>
@@ -17,6 +19,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import Prop34 from '~/components/Prop34.vue'
 import CostaMesaRaces from '~/components/CostaMesaRaces.vue'
 import FullertonRaces from '~/components/FullertonRaces.vue'
 import IrvineRaces from '~/components/IrvineRaces.vue'
@@ -28,8 +31,9 @@ import TustinRaces from '~/components/TustinRaces.vue'
 const isMobileMenuOpen = ref(false)
 const isDesktop = ref(false)
 
-// Navigation data (alphabetically ordered)
-const cities = [
+// Navigation data (with Prop 34 at the top)
+const sections = [
+  { id: 'prop-34', name: 'State Measures', component: Prop34 },
   { id: 'costa-mesa', name: 'Costa Mesa', component: CostaMesaRaces },
   { id: 'fullerton', name: 'Fullerton', component: FullertonRaces },
   { id: 'irvine', name: 'Irvine', component: IrvineRaces },
@@ -37,6 +41,9 @@ const cities = [
   { id: 'santa-ana', name: 'Santa Ana', component: SantaAnaRaces },
   { id: 'tustin', name: 'Tustin', component: TustinRaces }
 ]
+
+// Update template to use sections instead of cities
+const cities = sections // Keep this for backward compatibility if needed
 
 // Track active section
 const activeSection = ref('')
@@ -65,8 +72,8 @@ onMounted(() => {
   })
 
   // Observe all section elements
-  cities.forEach(city => {
-    const element = document.getElementById(city.id)
+  sections.forEach(section => {
+    const element = document.getElementById(section.id)
     if (element) observer.observe(element)
   })
 
@@ -76,8 +83,8 @@ onMounted(() => {
 
   // Cleanup
   onUnmounted(() => {
-    cities.forEach(city => {
-      const element = document.getElementById(city.id)
+    sections.forEach(section => {
+      const element = document.getElementById(section.id)
       if (element) observer.unobserve(element)
     })
     window.removeEventListener('resize', checkWidth)

@@ -1,8 +1,11 @@
 <template>
   <div class="space-y-8">
-    <!-- Loading and Error states remain the same -->
-
-    <!-- Results -->
+    <template v-if="loading">
+      <!-- Loading content -->
+    </template>
+    <template v-else-if="error">
+      <!-- Error content -->
+    </template>
     <template v-else-if="races.length">
       <div v-for="race in races" :key="race.title" class="bg-white rounded-lg shadow p-4 sm:p-6">
         <h2 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">{{ race.title }}</h2>
@@ -96,7 +99,5 @@
         Last Updated: {{ lastUpdated }}
       </div>
     </template>
-
-    <!-- No Results State remains the same -->
   </div>
 </template> 
