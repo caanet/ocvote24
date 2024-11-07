@@ -1,128 +1,14 @@
 <template>
-  <div class="min-h-screen bg-gray-50 relative">
-    <!-- Mobile Menu Button -->
-    <div class="lg:hidden fixed top-4 left-4 z-50">
-      <button 
-        @click="isMobileMenuOpen = !isMobileMenuOpen"
-        class="p-2 bg-white rounded-lg shadow-lg"
-      >
-        <span class="sr-only">Open menu</span>
-        <!-- Menu/Close icon -->
-        <svg 
-          class="h-6 w-6 text-gray-600" 
-          :class="{ 'hidden': isMobileMenuOpen }"
-          fill="none" 
-          stroke="currentColor" 
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-        <svg 
-          class="h-6 w-6 text-gray-600" 
-          :class="{ 'hidden': !isMobileMenuOpen }"
-          fill="none" 
-          stroke="currentColor" 
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-
-    <!-- Left Navigation Bar (Floating on mobile) -->
-    <div 
-      v-show="isMobileMenuOpen"
-      class="lg:hidden fixed left-0 top-0 w-64 h-full bg-white shadow-lg p-6 z-40 overflow-y-auto"
-    >
-      <h2 class="text-lg font-bold text-gray-900 mb-4">Cities</h2>
-      <nav class="space-y-2">
-        <a 
-          v-for="city in cities" 
-          :key="city.id"
-          :href="`#${city.id}`"
-          @click="isMobileMenuOpen = false"
-          class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors"
-          :class="{ 'bg-blue-50 text-blue-600': activeSection === city.id }"
-        >
-          {{ city.name }}
-        </a>
-      </nav>
-    </div>
-
-    <!-- Desktop Navigation (Fixed) -->
-    <div class="hidden lg:block fixed left-0 top-0 w-64 h-full bg-white shadow-lg p-6 overflow-y-auto">
-      <h2 class="text-lg font-bold text-gray-900 mb-4">Cities</h2>
-      <nav class="space-y-2">
-        <a 
-          v-for="city in cities" 
-          :key="city.id"
-          :href="`#${city.id}`"
-          class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors"
-          :class="{ 'bg-blue-50 text-blue-600': activeSection === city.id }"
-        >
-          {{ city.name }}
-        </a>
-      </nav>
-    </div>
-
-    <!-- Overlay for mobile -->
-    <div 
-      v-if="isMobileMenuOpen" 
-      class="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
-      @click="isMobileMenuOpen = false"
-    ></div>
-
-    <!-- Main Content -->
-    <div class="lg:pl-64">
-      <div class="p-4 lg:p-8">
-        <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-8 mt-12 lg:mt-0">Orange County Election Results</h1>
-        
-        <!-- Costa Mesa -->
-        <div id="costa-mesa" class="mb-12 scroll-mt-8">
-          <div class="mb-6">
-            <h2 class="text-xl lg:text-2xl font-bold text-gray-800">Costa Mesa Results</h2>
-          </div>
-          <CostaMesaRaces />
-        </div>
-
-        <!-- Fullerton -->
-        <div id="fullerton" class="mb-12 scroll-mt-8">
-          <div class="mb-6">
-            <h2 class="text-xl lg:text-2xl font-bold text-gray-800">Fullerton Results</h2>
-          </div>
-          <FullertonRaces />
-        </div>
-
-        <!-- Irvine -->
-        <div id="irvine" class="mb-12 scroll-mt-8">
-          <div class="mb-6">
-            <h2 class="text-xl lg:text-2xl font-bold text-gray-800">Irvine Results</h2>
-          </div>
-          <IrvineRaces />
-        </div>
-
-        <!-- Orange -->
-        <div id="orange" class="mb-12 scroll-mt-8">
-          <div class="mb-6">
-            <h2 class="text-xl lg:text-2xl font-bold text-gray-800">Orange Results</h2>
-          </div>
-          <OrangeRaces />
-        </div>
-
-        <!-- Santa Ana -->
-        <div id="santa-ana" class="mb-12 scroll-mt-8">
-          <div class="mb-6">
-            <h2 class="text-xl lg:text-2xl font-bold text-gray-800">Santa Ana Results</h2>
-          </div>
-          <SantaAnaRaces />
-        </div>
-
-        <!-- Tustin -->
-        <div id="tustin" class="mb-12 scroll-mt-8">
-          <div class="mb-6">
-            <h2 class="text-xl lg:text-2xl font-bold text-gray-800">Tustin Results</h2>
-          </div>
-          <TustinRaces />
+  <div class="container mx-auto px-4">
+    <div class="py-8">
+      <!-- City Sections -->
+      <div class="space-y-12">
+        <div v-for="city in cities" :key="city.id" :id="city.id" class="scroll-mt-20">
+          <h2 class="text-xl lg:text-2xl font-bold text-gray-800 mb-6">{{ city.name }} Results</h2>
+          <component 
+            :is="city.component" 
+            v-if="city.component"
+          />
         </div>
       </div>
     </div>
@@ -144,12 +30,12 @@ const isDesktop = ref(false)
 
 // Navigation data (alphabetically ordered)
 const cities = [
-  { id: 'costa-mesa', name: 'Costa Mesa' },
-  { id: 'fullerton', name: 'Fullerton' },
-  { id: 'irvine', name: 'Irvine' },
-  { id: 'orange', name: 'Orange' },
-  { id: 'santa-ana', name: 'Santa Ana' },
-  { id: 'tustin', name: 'Tustin' }
+  { id: 'costa-mesa', name: 'Costa Mesa', component: CostaMesaRaces },
+  { id: 'fullerton', name: 'Fullerton', component: FullertonRaces },
+  { id: 'irvine', name: 'Irvine', component: IrvineRaces },
+  { id: 'orange', name: 'Orange', component: OrangeRaces },
+  { id: 'santa-ana', name: 'Santa Ana', component: SantaAnaRaces },
+  { id: 'tustin', name: 'Tustin', component: TustinRaces }
 ]
 
 // Track active section

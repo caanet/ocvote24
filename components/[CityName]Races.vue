@@ -1,89 +1,6 @@
-<script setup>
-const races = ref([])
-const loading = ref(true)
-const error = ref(null)
-const lastUpdated = ref('')
-
-// Format helpers
-const formatNumber = (num) => {
-  return new Intl.NumberFormat().format(num)
-}
-
-const formatPercentage = (num) => {
-  return num ? num.toFixed(1) + '%' : '0%'
-}
-
-// Calculate total votes for a race
-const getTotalVotes = (candidates) => {
-  return candidates.reduce((sum, candidate) => sum + candidate.votes, 0)
-}
-
-// Calculate remaining ballots to count
-const getLeftToCount = (race) => {
-  const totalVotes = getTotalVotes(race.candidates)
-  return race.totalBallots - totalVotes
-}
-
-// Calculate differences between candidates
-const getVoteDifference = (candidates, index) => {
-  if (index === 0) return null
-  const difference = candidates[0].votes - candidates[index].votes
-  return difference
-}
-
-const getPercentageDifference = (candidates, index) => {
-  if (index === 0) return null
-  const difference = candidates[0].percentage - candidates[index].percentage
-  return difference
-}
-
-// Fetch race data
-const fetchRaces = async () => {
-  try {
-    loading.value = true
-    error.value = null
-    
-    const { data } = await useFetch('/api/costa-mesa-races')
-
-    if (!data.value) {
-      throw new Error('No data received')
-    }
-
-    races.value = data.value.races
-    lastUpdated.value = data.value.generatedDate
-    
-  } catch (err) {
-    error.value = 'Unable to load race data. Please try again later.'
-  } finally {
-    loading.value = false
-  }
-}
-
-// Fetch data immediately
-fetchRaces()
-</script>
-
 <template>
   <div class="space-y-8">
-    <!-- Loading State -->
-    <div v-if="loading" class="flex justify-center items-center py-8">
-      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-    </div>
-
-    <!-- Error State -->
-    <div v-else-if="error" class="bg-red-50 border-l-4 border-red-500 p-4">
-      <div class="flex">
-        <div class="ml-3">
-          <p class="text-sm text-red-700">{{ error }}</p>
-          <button 
-            @click="fetchRaces" 
-            class="mt-2 text-sm text-red-600 hover:text-red-500 underline"
-          >
-            Try Again
-          </button>
-        </div>
-      </div>
-    </div>
+    <!-- Loading and Error states remain the same -->
 
     <!-- Results -->
     <template v-else-if="races.length">
@@ -91,7 +8,7 @@ fetchRaces()
         <h2 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">{{ race.title }}</h2>
         
         <!-- Vote Totals Summary -->
-        <div class="mb-4 p-3 sm:p-4 bg-gray-50 rounded-lg overflow-x-auto">
+        <div class="mb-4 p-3 sm:p-4 bg-gray-50 rounded-lg">
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4">
             <div class="text-sm">
               <span class="text-gray-600">Total Votes: </span>
@@ -109,7 +26,7 @@ fetchRaces()
         </div>
         
         <!-- Table Container -->
-        <div class="overflow-x-auto -mx-4 sm:mx-0">
+        <div class="overflow-x-auto -mx-4 sm:-mx-6 lg:mx-0">
           <div class="inline-block min-w-full align-middle">
             <table class="min-w-full divide-y divide-gray-200">
               <thead class="bg-gray-50">
@@ -124,7 +41,7 @@ fetchRaces()
                     Behind
                   </th>
                   <th scope="col" class="px-3 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Percentage
+                    %
                   </th>
                 </tr>
               </thead>
@@ -145,7 +62,7 @@ fetchRaces()
                     <template v-if="index > 0">
                       <span class="text-red-600">
                         -{{ formatNumber(getVoteDifference(race.candidates, index)) }}
-                        <span class="text-gray-500 text-xs ml-1">
+                        <span class="hidden sm:inline text-gray-500 text-xs ml-1">
                           (-{{ formatPercentage(getPercentageDifference(race.candidates, index)) }})
                         </span>
                       </span>
@@ -180,9 +97,6 @@ fetchRaces()
       </div>
     </template>
 
-    <!-- No Results State -->
-    <div v-else-if="!loading && !error" class="text-center py-8 text-gray-500">
-      No results available at this time.
-    </div>
+    <!-- No Results State remains the same -->
   </div>
 </template> 

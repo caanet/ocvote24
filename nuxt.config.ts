@@ -10,5 +10,9 @@ export default defineNuxtConfig({
   modules: [
     "nitro-cloudflare-dev",
     "@nuxtjs/tailwindcss"
-  ]
+  ],
+
+  app: {
+    layoutTransition: { name: 'layout', mode: 'out-in' }
+  }
 })
