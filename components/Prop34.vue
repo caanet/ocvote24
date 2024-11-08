@@ -3,12 +3,12 @@
     <div v-if="loading">Loading...</div>
     <div v-else-if="error">{{ error }}</div>
     <div v-else-if="measure">
-      <h1 class="text-2xl font-bold">Proposition {{ measure.Number }}</h1>
-      <h2 class="text-xl mb-6 text-gray-700">{{ measure.Name }}</h2>
+      <h2 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">Proposition {{ measure.Number }}</h2>
+      <h2 class="text-base mb-6 text-gray-700">{{ measure.Name }}</h2>
       
       <!-- Total Votes -->
       <div class="mb-4 text-gray-600">
-        Total Votes: {{ totalVotes }}
+        Total Votes Statewide: {{ totalVotes }}
       </div>
 
       <div class="space-y-4">
