@@ -1,8 +1,5 @@
 <template>
   <div class="space-y-6">
-    <!-- Page Title -->
-    <h2 class="text-2xl font-bold text-gray-900">State Races Results</h2>
-
     <!-- Debug info -->
     <pre v-if="!sd37Race" class="text-sm text-gray-500">Loading data...</pre>
 
