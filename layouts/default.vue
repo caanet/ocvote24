@@ -85,14 +85,26 @@
 
     <!-- Main Content -->
     <main class="pt-16">
-      <div class="bg-blue-50 border-b border-blue-100">
-        <div class="max-w-7xl mx-auto py-2 px-4 sm:px-6 lg:px-8">
-          <p class="text-sm text-center text-blue-700">
-            Next update in 
-            <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+      <div class="relative isolate flex items-center justify-center gap-x-6 overflow-hidden bg-gray-50 px-6 py-2.5 sm:px-3.5">
+        <div class="absolute left-[max(-7rem,calc(50%-52rem))] top-1/2 -z-10 -translate-y-1/2 transform-gpu blur-2xl" aria-hidden="true">
+          <div class="aspect-[577/310] w-[36.0625rem] bg-gradient-to-r from-[#ff80b5] to-[#9089fc] opacity-30" style="clip-path: polygon(74.8% 41.9%, 97.2% 73.2%, 100% 34.9%, 92.5% 0.4%, 87.5% 0%, 75% 28.6%, 58.5% 54.6%, 50.1% 56.8%, 46.9% 44%, 48.3% 17.4%, 24.7% 53.9%, 0% 27.9%, 11.9% 74.2%, 24.9% 54.1%, 68.6% 100%, 74.8% 41.9%)"></div>
+        </div>
+        <div class="absolute left-[max(45rem,calc(50%+8rem))] top-1/2 -z-10 -translate-y-1/2 transform-gpu blur-2xl" aria-hidden="true">
+          <div class="aspect-[577/310] w-[36.0625rem] bg-gradient-to-r from-[#ff80b5] to-[#9089fc] opacity-30" style="clip-path: polygon(74.8% 41.9%, 97.2% 73.2%, 100% 34.9%, 92.5% 0.4%, 87.5% 0%, 75% 28.6%, 58.5% 54.6%, 50.1% 56.8%, 46.9% 44%, 48.3% 17.4%, 24.7% 53.9%, 0% 27.9%, 11.9% 74.2%, 24.9% 54.1%, 68.6% 100%, 74.8% 41.9%)"></div>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-center">
+          <p class="text-sm leading-6 text-gray-900 text-center">
+            <strong class="font-semibold">Last Update:</strong>
+            <span class="inline-flex items-center rounded-md bg-white/10 px-2 py-1 text-xs font-medium text-gray-900 ring-1 ring-inset ring-gray-900/10 ml-2">
+              {{ generatedDate }}
+            </span>
+          </p>
+          <p class="text-sm leading-6 text-gray-900 text-center">
+            <strong class="font-semibold">Next Update:</strong>
+            <span class="inline-flex items-center rounded-md bg-white/10 px-2 py-1 text-xs font-medium text-gray-900 ring-1 ring-inset ring-gray-900/10 ml-2">
               {{ timeLeft }}
             </span>
-            (5:00 PM PST)
+            <span class="ml-1">(5:00 PM PT)</span>
           </p>
         </div>
       </div>
@@ -113,7 +125,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 
 const isMobileMenuOpen = ref(false)
 
@@ -148,25 +160,44 @@ onUnmounted(() => {
 
 const getNextUpdate = () => {
   const now = new Date()
-  const pst = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }))
-  let next = new Date(pst)
+  const pacificTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }))
+  let next = new Date(pacificTime)
   
-  next.setHours(17, 0, 0, 0) // Set to 5:00 PM
+  next.setHours(17, 0, 0, 0)
   
-  // If it's past 5 PM, set to next day
-  if (pst.getHours() >= 17) {
+  if (pacificTime.getHours() >= 17) {
     next.setDate(next.getDate() + 1)
   }
   
-  return next
+  return new Date(next.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }))
 }
 
 const timeLeft = ref('')
+const lastUpdate = ref('')
+
+// Get the last update time from irvine-races.ts
+const { data: raceData } = await useFetch('/api/irvine-races')
+const generatedDate = computed(() => {
+  if (raceData.value?.generatedDate) {
+    return new Date(raceData.value.generatedDate).toLocaleString('en-US', { 
+      timeZone: 'America/Los_Angeles',
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: true,
+      timeZoneName: 'short'
+    })
+  }
+  return 'Not available'
+})
 
 const updateCountdown = () => {
   const now = new Date()
   const next = getNextUpdate()
-  const diff = next - now
+  const diff = Math.max(0, next - now)
   
   const hours = Math.floor(diff / (1000 * 60 * 60))
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
@@ -175,7 +206,6 @@ const updateCountdown = () => {
   timeLeft.value = `${hours}h ${minutes}m ${seconds}s`
 }
 
-// Update countdown every second
 onMounted(() => {
   updateCountdown()
   setInterval(updateCountdown, 1000)
