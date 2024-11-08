@@ -136,7 +136,9 @@ const cities = [
   { id: 'irvine', name: 'Irvine' },
   { id: 'orange', name: 'Orange' },
   { id: 'santa-ana', name: 'Santa Ana' },
-  { id: 'tustin', name: 'Tustin' }
+  { id: 'tustin', name: 'Tustin' },
+  { id: 'state-races', name: 'State Races' },
+  { id: 'congress', name: 'Congress'}
 ]
 
 // Close mobile menu on route change

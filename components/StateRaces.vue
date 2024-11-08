@@ -10,7 +10,7 @@
     <div v-if="sd37Race" class="bg-white shadow rounded-lg divide-y divide-gray-200">
       <div class="p-6">
         <!-- Race Header -->
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
           <h3 class="text-lg font-medium leading-6 text-gray-900">
             {{ sd37Race[0]?.RaceName }}
           </h3>
