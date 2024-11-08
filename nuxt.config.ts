@@ -33,6 +33,10 @@ export default defineNuxtConfig({
           content: 'Live election results for Orange County cities including Costa Mesa, Fullerton, Irvine, Orange, Santa Ana, and Tustin. View real-time vote counts and percentages for local races.'
         },
         {
+          property: 'og:image',
+          content: 'https://ocvote24.pages.dev/preview.png'
+        },
+        {
           property: 'og:type',
           content: 'website'
         },
@@ -51,10 +55,14 @@ export default defineNuxtConfig({
         {
           name: 'twitter:description',
           content: 'Live election results for Orange County cities including Costa Mesa, Fullerton, Irvine, Orange, Santa Ana, and Tustin. View real-time vote counts and percentages for local races.'
+        },
+        {
+          name: 'twitter:image',
+          content: 'https://ocvote24.pages.dev/preview.png'
         }
       ],
       link: [
-        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+        { rel: 'icon', href: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🇺🇸</text></svg>' }
       ]
     }
   },
