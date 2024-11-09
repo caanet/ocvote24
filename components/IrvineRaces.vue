@@ -142,9 +142,20 @@ fetchRaces()
                 <tr v-for="(candidate, index) in race.candidates" 
                     :key="candidate.name" 
                     class="hover:bg-gray-50"
-                    :class="{'font-semibold': index === 0}"
+                    :class="{
+                      'font-semibold': index === 0,
+                      'text-gray-400': index > 0 && 
+                        (candidate.votes + getLeftToCount(race)) < race.candidates[0].votes
+                    }"
                 >
-                  <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm"
+                      :class="{
+                        'text-gray-900': index === 0 || 
+                          (candidate.votes + getLeftToCount(race)) >= race.candidates[0].votes,
+                        'text-gray-400': index > 0 && 
+                          (candidate.votes + getLeftToCount(race)) < race.candidates[0].votes
+                      }"
+                  >
                     {{ candidate.name }}
                     <span 
                       v-if="index === 0" 
@@ -165,12 +176,22 @@ fetchRaces()
                       }}
                     </span>
                   </td>
-                  <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900">
+                  <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-right"
+                      :class="{
+                        'text-gray-900': index === 0 || 
+                          (candidate.votes + getLeftToCount(race)) >= race.candidates[0].votes,
+                        'text-gray-400': index > 0 && 
+                          (candidate.votes + getLeftToCount(race)) < race.candidates[0].votes
+                      }"
+                  >
                     {{ formatNumber(candidate.votes) }}
                   </td>
-                  <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900">
+                  <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-right">
                     <template v-if="index > 0">
-                      <span class="text-red-600">
+                      <span :class="{
+                        'text-red-600': (candidate.votes + getLeftToCount(race)) >= race.candidates[0].votes,
+                        'text-gray-400': (candidate.votes + getLeftToCount(race)) < race.candidates[0].votes
+                      }">
                         -{{ formatNumber(getVoteDifference(race.candidates, index)) }}
                         <span class="hidden sm:inline text-gray-500 text-xs ml-1">
                           (-{{ formatPercentage(getPercentageDifference(race.candidates, index)) }})
