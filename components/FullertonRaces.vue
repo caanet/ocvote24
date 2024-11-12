@@ -37,6 +37,13 @@ const getPercentageDifference = (candidates, index) => {
   return difference
 }
 
+// Add this helper function
+const cannotCatchLeader = (candidate, index, race) => {
+  if (index === 0) return false // Leader can't be behind themselves
+  const leader = race.candidates[0]
+  return (candidate.votes + getLeftToCount(race)) < leader.votes
+}
+
 // Fetch race data
 const fetchRaces = async () => {
   try {
@@ -144,16 +151,13 @@ fetchRaces()
                     class="hover:bg-gray-50"
                     :class="{
                       'font-semibold': index === 0,
-                      'text-gray-400': index > 0 && 
-                        (candidate.votes + getLeftToCount(race)) < race.candidates[0].votes
+                      'text-gray-400': cannotCatchLeader(candidate, index, race)
                     }"
                 >
                   <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm"
                       :class="{
-                        'text-gray-900': index === 0 || 
-                          (candidate.votes + getLeftToCount(race)) >= race.candidates[0].votes,
-                        'text-gray-400': index > 0 && 
-                          (candidate.votes + getLeftToCount(race)) < race.candidates[0].votes
+                        'text-gray-900': !cannotCatchLeader(candidate, index, race),
+                        'text-gray-400': cannotCatchLeader(candidate, index, race)
                       }"
                   >
                     {{ candidate.name }}
@@ -163,14 +167,14 @@ fetchRaces()
                         'ml-2 inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset border',
                         getLeftToCount(race) === 0
                           ? 'bg-yellow-50 text-yellow-800 ring-yellow-600/20 border-yellow-200'
-                          : race.candidates[1] && (race.candidates[1].votes + getLeftToCount(race)) < candidate.votes
+                          : cannotCatchLeader(race.candidates[1], 1, race)
                             ? 'bg-blue-50 text-blue-700 ring-blue-600/20 border-blue-200'
                             : 'bg-green-50 text-green-700 ring-green-600/20 border-green-200'
                       ]"
                     >
                       {{ getLeftToCount(race) === 0 
                           ? 'WON' 
-                          : race.candidates[1] && (race.candidates[1].votes + getLeftToCount(race)) < candidate.votes
+                          : cannotCatchLeader(race.candidates[1], 1, race)
                             ? 'LIKELY WINNER'
                             : 'LEADING' 
                       }}
@@ -178,10 +182,8 @@ fetchRaces()
                   </td>
                   <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-right"
                       :class="{
-                        'text-gray-900': index === 0 || 
-                          (candidate.votes + getLeftToCount(race)) >= race.candidates[0].votes,
-                        'text-gray-400': index > 0 && 
-                          (candidate.votes + getLeftToCount(race)) < race.candidates[0].votes
+                        'text-gray-900': !cannotCatchLeader(candidate, index, race),
+                        'text-gray-400': cannotCatchLeader(candidate, index, race)
                       }"
                   >
                     {{ formatNumber(candidate.votes) }}
@@ -189,8 +191,8 @@ fetchRaces()
                   <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-right">
                     <template v-if="index > 0">
                       <span :class="{
-                        'text-red-600': (candidate.votes + getLeftToCount(race)) >= race.candidates[0].votes,
-                        'text-gray-400': (candidate.votes + getLeftToCount(race)) < race.candidates[0].votes
+                        'text-red-600': !cannotCatchLeader(candidate, index, race),
+                        'text-gray-400': cannotCatchLeader(candidate, index, race)
                       }">
                         -{{ formatNumber(getVoteDifference(race.candidates, index)) }}
                         <span class="hidden sm:inline text-gray-500 text-xs ml-1">
@@ -204,12 +206,16 @@ fetchRaces()
                       <div class="absolute inset-y-0 left-0 w-full bg-gray-100"></div>
                       <div 
                         class="absolute inset-y-0 left-0 transition-all duration-500 ease-out"
-                        :class="index === 0 ? 'bg-green-500' : 'bg-gray-400'"
+                        :class="[
+                          index === 0 ? 'bg-green-500' : 'bg-gray-400',
+                          cannotCatchLeader(candidate, index, race) ? 'opacity-50' : ''
+                        ]"
                         :style="{
                           width: `${candidate.percentage}%`
                         }"
                       ></div>
-                      <span class="relative z-10 font-medium">
+                      <span class="relative z-10 font-medium"
+                            :class="{ 'text-gray-400': cannotCatchLeader(candidate, index, race) }">
                         {{ formatPercentage(candidate.percentage) }}
                       </span>
                     </div>
