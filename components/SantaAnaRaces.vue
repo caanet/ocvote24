@@ -198,7 +198,10 @@ const getTotalVotes = (candidates) => {
 // Calculate remaining ballots to count
 const getLeftToCount = (race) => {
   const totalVotes = getTotalVotes(race.candidates)
-  return race.totalBallots - totalVotes
+  const overVotes = race.overVotes || 0
+  const underVotes = race.underVotes || 0
+  const timesCounted = race.totalBallots || 0
+  return timesCounted - (totalVotes + overVotes + underVotes)
 }
 
 // Calculate differences between candidates

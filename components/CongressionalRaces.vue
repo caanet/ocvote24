@@ -57,7 +57,7 @@
                 </span>
                 <span class="text-sm font-medium text-gray-900">{{ formatCandidateName(candidate.ContestantName) }}</span>
                 <span 
-                  v-if="isLeading(candidate)" 
+                  v-if="isLeading(candidate) && !isLikelyWinner(candidate)" 
                   class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
                 >
                   Leading
@@ -185,9 +185,14 @@ const getTotalCounted = () => {
 }
 
 const getLeftToCount = () => {
-  const totalBallots = getTotalBallots()
-  const totalCounted = getTotalCounted()
-  return Math.max(0, totalBallots - totalCounted)
+  if (!cd47Race.value?.[0]) return 0
+  
+  const timesCounted = parseInt(cd47Race.value[0].TimesCounted) || 0
+  const totalVotes = getTotalCounted()
+  const overVotes = parseInt(cd47Race.value[0].OverVotes) || 0
+  const underVotes = parseInt(cd47Race.value[0].UnderVotes) || 0
+  
+  return timesCounted - (totalVotes + overVotes + underVotes)
 }
 
 const getNeededToWin = () => {

@@ -8,14 +8,13 @@ export default defineEventHandler(async () => {
     const parser = new XMLParser()
     const jsonData = parser.parse(xmlData)
     
+    // Extract Orange races
+    const orangeRaces = {}
     let generatedDate = ''
 
     if (jsonData.NewDataSet?.GeneratedDate) {
       generatedDate = jsonData.NewDataSet.GeneratedDate
     }
-
-    // Extract Orange races
-    const orangeRaces = {}
 
     jsonData.NewDataSet.Table.forEach(entry => {
       if (entry.RaceName?.startsWith('Z - City of Orange')) {
@@ -23,15 +22,19 @@ export default defineEventHandler(async () => {
           orangeRaces[entry.RaceName] = {
             title: entry.RaceName.replace('Z - ', ''),
             totalBallots: parseInt(entry.TimesCounted) || 0,
+            overVotes: parseInt(entry.OverVotes) || 0,
+            underVotes: parseInt(entry.UnderVotes) || 0,
             candidates: []
           }
         }
 
-        // Add the candidate
-        orangeRaces[entry.RaceName].candidates.push({
-          name: entry.ContestantName?.replace('*', '').trim(),
-          votes: parseInt(entry.TotalVotes) || 0
-        })
+        // Only add to candidates if it's not an over/under vote entry
+        if (entry.ContestantName && !entry.ContestantName.includes('Over Votes') && !entry.ContestantName.includes('Under Votes')) {
+          orangeRaces[entry.RaceName].candidates.push({
+            name: entry.ContestantName?.replace('*', '').trim(),
+            votes: parseInt(entry.TotalVotes) || 0
+          })
+        }
       }
     })
 

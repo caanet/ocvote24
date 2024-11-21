@@ -21,7 +21,11 @@ const getTotalVotes = (candidates) => {
 // Calculate remaining ballots to count
 const getLeftToCount = (race) => {
   const totalVotes = getTotalVotes(race.candidates)
-  return race.totalBallots - totalVotes
+  const overVotes = race.overVotes || 0
+  const underVotes = race.underVotes || 0
+  const timesCounted = race.totalBallots || 0
+
+  return timesCounted - (totalVotes + overVotes + underVotes)
 }
 
 // Calculate differences between candidates
@@ -43,16 +47,28 @@ const fetchRaces = async () => {
     loading.value = true
     error.value = null
     
-    const { data } = await useFetch('/api/costa-mesa-races')
+    const { data } = await useFetch('/api/costa-mesa-races', {
+      query: {
+        includeVoteCounts: true  // Add this if your API supports query params
+      }
+    })
 
     if (!data.value) {
       throw new Error('No data received')
     }
 
-    races.value = data.value.races
+    // Log the raw data to see what we're getting
+    console.log('Raw race data:', data.value)
+
+    races.value = data.value.races.map(race => ({
+      ...race,
+      overVotes: race.overVotes || 0,  // Ensure these properties exist
+      underVotes: race.underVotes || 0
+    }))
     lastUpdated.value = data.value.generatedDate
     
   } catch (err) {
+    console.error('Error fetching races:', err)
     error.value = 'Unable to load race data. Please try again later.'
   } finally {
     loading.value = false

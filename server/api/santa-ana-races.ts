@@ -23,14 +23,19 @@ export default defineEventHandler(async () => {
           santaAnaRaces[entry.RaceName] = {
             title: entry.RaceName,
             totalBallots: parseInt(entry.TimesCounted) || 0,
+            overVotes: parseInt(entry.OverVotes) || 0,
+            underVotes: parseInt(entry.UnderVotes) || 0,
             candidates: []
           }
         }
 
-        santaAnaRaces[entry.RaceName].candidates.push({
-          name: entry.ContestantName?.replace('*', '').trim(),
-          votes: parseInt(entry.TotalVotes) || 0
-        })
+        // Only add to candidates if it's not an over/under vote entry
+        if (entry.ContestantName && !entry.ContestantName.includes('Over Votes') && !entry.ContestantName.includes('Under Votes')) {
+          santaAnaRaces[entry.RaceName].candidates.push({
+            name: entry.ContestantName?.replace('*', '').trim(),
+            votes: parseInt(entry.TotalVotes) || 0
+          })
+        }
       }
     })
 

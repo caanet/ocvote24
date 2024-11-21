@@ -21,7 +21,10 @@ const getTotalVotes = (candidates) => {
 // Calculate remaining ballots to count
 const getLeftToCount = (race) => {
   const totalVotes = getTotalVotes(race.candidates)
-  return race.totalBallots - totalVotes
+  const overVotes = race.overVotes || 0
+  const underVotes = race.underVotes || 0
+  const timesCounted = race.totalBallots || 0
+  return timesCounted - (totalVotes + overVotes + underVotes)
 }
 
 // Calculate differences between candidates
@@ -75,18 +78,12 @@ fetchRaces()
       <div class="flex">
         <div class="ml-3">
           <p class="text-sm text-red-700">{{ error }}</p>
-          <button 
-            @click="fetchRaces" 
-            class="mt-2 text-sm text-red-600 hover:text-red-500 underline"
-          >
-            Try Again
-          </button>
         </div>
       </div>
     </div>
 
     <!-- Results -->
-    <template v-else-if="races.length">
+    <div v-else-if="races.length">
       <div v-for="race in races" :key="race.title" class="bg-white rounded-lg shadow p-4 sm:p-6">
         <h2 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">{{ race.title }}</h2>
         
@@ -187,7 +184,7 @@ fetchRaces()
                     {{ formatNumber(candidate.votes) }}
                   </td>
                   <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-right">
-                    <template v-if="index > 0">
+                    <div v-if="index > 0">
                       <span :class="{
                         'text-red-600': (candidate.votes + getLeftToCount(race)) >= race.candidates[0].votes,
                         'text-gray-400': (candidate.votes + getLeftToCount(race)) < race.candidates[0].votes
@@ -197,7 +194,7 @@ fetchRaces()
                           (-{{ formatPercentage(getPercentageDifference(race.candidates, index)) }})
                         </span>
                       </span>
-                    </template>
+                    </div>
                   </td>
                   <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-right relative">
                     <div class="relative flex items-center justify-end h-full">
@@ -225,7 +222,7 @@ fetchRaces()
       <div class="text-sm text-gray-500 text-right px-4 sm:px-0">
         Last Updated: {{ lastUpdated }}
       </div>
-    </template>
+    </div>
 
     <!-- No Results State -->
     <div v-else-if="!loading && !error" class="text-center py-8 text-gray-500">

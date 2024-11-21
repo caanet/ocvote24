@@ -23,14 +23,18 @@ export default defineEventHandler(async () => {
           costaMesaRaces[entry.RaceName] = {
             title: entry.RaceName,
             totalBallots: parseInt(entry.TimesCounted) || 0,
+            overVotes: parseInt(entry.OverVotes) || 0,
+            underVotes: parseInt(entry.UnderVotes) || 0,
             candidates: []
           }
         }
 
-        costaMesaRaces[entry.RaceName].candidates.push({
-          name: entry.ContestantName?.replace('*', '').trim(),
-          votes: parseInt(entry.TotalVotes) || 0
-        })
+        if (entry.ContestantName && !entry.ContestantName.includes('Over Votes') && !entry.ContestantName.includes('Under Votes')) {
+          costaMesaRaces[entry.RaceName].candidates.push({
+            name: entry.ContestantName?.replace('*', '').trim(),
+            votes: parseInt(entry.TotalVotes) || 0
+          })
+        }
       }
     })
 

@@ -56,7 +56,7 @@
                 </span>
                 <span class="text-sm font-medium text-gray-900">{{ formatCandidateName(candidate.ContestantName) }}</span>
                 <span 
-                  v-if="isLeading(candidate)" 
+                  v-if="isLeading(candidate) && !isLikelyWinner(candidate)" 
                   class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
                 >
                   Leading
@@ -174,9 +174,30 @@ const getTotalCounted = () => {
 }
 
 const getLeftToCount = () => {
-  const totalBallots = getTotalBallots()
-  const totalCounted = getTotalCounted()
-  return Math.max(0, totalBallots - totalCounted)
+  if (!sd37Race.value?.[0]) return 0
+  
+  // Sum up all candidate votes
+  const sumOfCandidateVotes = sd37Race.value.reduce((sum, candidate) => 
+    sum + (parseInt(candidate.TotalVotes) || 0), 0
+  )
+  
+  const timesCounted = parseInt(sd37Race.value[0].TimesCounted) || 0
+  const overVotes = parseInt(sd37Race.value[0].OverVotes) || 0
+  const underVotes = parseInt(sd37Race.value[0].UnderVotes) || 0
+  
+  console.log('Race:', sd37Race.value[0].RaceName)
+  console.log('Candidates:')
+  sd37Race.value.forEach(candidate => {
+    console.log(`  ${candidate.ContestantName}: ${candidate.TotalVotes} votes`)
+  })
+  console.log('Sum of Candidate Votes:', sumOfCandidateVotes)
+  console.log('Over Votes:', overVotes)
+  console.log('Under Votes:', underVotes)
+  console.log('Times Counted:', timesCounted)
+  console.log('Left to Count:', timesCounted - (sumOfCandidateVotes + overVotes + underVotes))
+  console.log('------------------------')
+  
+  return timesCounted - (sumOfCandidateVotes + overVotes + underVotes)
 }
 
 const getNeededToWin = () => {
