@@ -15,11 +15,12 @@
     "@headlessui/vue": "^1.7.23",
     "@heroicons/vue": "^2.1.5",
     "@tailwindcss/typography": "^0.5.15",
-    "fast-xml-parser": "^4.5.0",
+    "fast-xml-parser": "^5.5.9",
     "install": "^0.13.0",
     "node-forge": "^1.4.0",
     "node-html-parser": "^6.1.13",
     "nuxt": "^3.14.159",
+    "picomatch": "^4.0.4",
     "vue": "latest",
     "vue-router": "latest"
   },
@@ -31,6 +32,6 @@
     "nitro-cloudflare-dev": "^0.2.1",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
-    "wrangler": "^3.85.0"
+    "wrangler": "^4.78.0"
   }
 }
